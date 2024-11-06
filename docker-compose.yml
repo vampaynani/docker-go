@@ -1,0 +1,28 @@
+name: trucode-go
+services:
+  api:
+    build:
+      context: .
+      args:
+        - PORT=8080
+    ports:
+      - 80:8080
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=me
+      - DB_PASSWORD=supersecret
+      - DB_NAME=my_db
+    restart: on-failure
+    depends_on:
+      - db
+  db:
+    image: postgres:14-alpine
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - 54320:5432
+    environment:
+      - POSTGRES_PASSWORD=supersecret
+      - POSTGRES_USER=me
+      - POSTGRES_DB=my_db
